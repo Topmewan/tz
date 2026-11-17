@@ -1,12 +1,13 @@
 <script setup lang="ts">
-useHead({
-  title: 'tz',
-  meta: [{ name: 'description', content: 'Локальные заметки' }],
-})
+import { onScopeDispose } from 'vue'
+import { useNotesPersistence } from './composables/useNotesPersistence'
+
+if (import.meta.client) {
+  const persistence = useNotesPersistence()
+  onScopeDispose(persistence.dispose)
+}
 </script>
 
 <template>
-  <main class="app">
-    <h1 class="app__title">tz</h1>
-  </main>
+  <NuxtPage />
 </template>

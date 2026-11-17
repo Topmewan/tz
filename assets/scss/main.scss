@@ -1,26 +1,16 @@
+@use './tokens' as *;
+
 :root {
   color-scheme: light;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: $color-ink;
+  background: $color-canvas;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  min-width: 320px;
-  min-height: 100vh;
-  margin: 0;
-}
-
-.app {
-  min-height: 100vh;
-  padding: 2rem;
-
-  &__title {
-    margin: 0;
-    font-size: 1.5rem;
-  }
-}
+* { box-sizing: border-box; }
+body { min-width: $viewport-min-width; min-height: $viewport-height; margin: 0; }
+button, input, textarea { font: inherit; }
+button { touch-action: manipulation; }
+a { color: inherit; }
+::selection { background: $color-soft; }
