@@ -77,3 +77,9 @@ docker compose up --build
 - `utils/history/` — команды Undo/Redo
 - `utils/storage/` — проверка, сериализация и синхронизация localStorage
 - `tests/unit/` — тесты истории, store, persistence и межвкладочных сценариев
+
+## GitHub Pages
+
+Push в ветку `main` запускает GitHub Actions: Nuxt генерирует статический SPA с базовым путём `/tz/`, а workflow публикует его через GitHub Pages. Для прямых URL добавляется `404.html` с приложением, чтобы маршруты `/notes/:id` открывались корректно.
+
+Сайт: https://topmewan.github.io/tz/
