@@ -13,13 +13,13 @@ describe('notes store', () => {
     const store = useNotesStore()
     store.hydrate([first, second])
     expect(store.hasHydrated).toBe(true)
-    expect(store.sortedNotes.map((note) => note.id)).toEqual(['b', 'a'])
+    expect(store.sortedNotes.map(note => note.id)).toEqual(['b', 'a'])
     expect(store.findNote('a')).toEqual(first)
     store.upsertNote({ ...first, title: 'Updated' })
     expect(store.notes).toHaveLength(2)
     expect(store.findNote('a')?.title).toBe('Updated')
     store.deleteNote('b')
-    expect(store.notes.map((note) => note.id)).toEqual(['a'])
+    expect(store.notes.map(note => note.id)).toEqual(['a'])
   })
 
   it('tracks external deletion separately from persisted notes', () => {

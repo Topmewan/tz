@@ -15,17 +15,17 @@ export const useNotesStore = defineStore('notes', () => {
   }
 
   function upsertNote(note: Note): void {
-    const index = notes.value.findIndex((entry) => entry.id === note.id)
+    const index = notes.value.findIndex(entry => entry.id === note.id)
     if (index === -1) notes.value = [...notes.value, note]
-    else notes.value = notes.value.map((entry) => entry.id === note.id ? note : entry)
+    else notes.value = notes.value.map(entry => entry.id === note.id ? note : entry)
   }
 
   function deleteNote(id: NoteId): void {
-    notes.value = notes.value.filter((note) => note.id !== id)
+    notes.value = notes.value.filter(note => note.id !== id)
   }
 
   function findNote(id: NoteId): Note | undefined {
-    return notes.value.find((note) => note.id === id)
+    return notes.value.find(note => note.id === id)
   }
 
   function setExternalDeletion(id: NoteId | null): void {

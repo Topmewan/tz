@@ -39,11 +39,11 @@ function sameTarget(left: EditorTarget, right: EditorTarget): boolean {
 
 function setText(note: Note, target: EditorTarget, value: string): Note {
   if (target.kind === 'title') return { ...note, title: value }
-  return { ...note, todos: note.todos.map((todo) => todo.id === target.todoId ? { ...todo, text: value } : todo) }
+  return { ...note, todos: note.todos.map(todo => todo.id === target.todoId ? { ...todo, text: value } : todo) }
 }
 
 function copyNote(note: Note): Note {
-  return { ...note, todos: note.todos.map((todo) => ({ ...todo })) }
+  return { ...note, todos: note.todos.map(todo => ({ ...todo })) }
 }
 
 export function useNoteEditor(noteId: string, recoveredDraft: NoteDraft | null = null): NoteEditor {
@@ -64,7 +64,7 @@ export function useNoteEditor(noteId: string, recoveredDraft: NoteDraft | null =
   const canUndo = computed(() => history.value.undoStack.length > 0)
   const canRedo = computed(() => history.value.redoStack.length > 0)
   const isDirty = computed(() => JSON.stringify(note.value) !== baseline.value)
-  const hasEmptyTodos = computed(() => note.value.todos.some((todo) => !todo.text.trim()))
+  const hasEmptyTodos = computed(() => note.value.todos.some(todo => !todo.text.trim()))
 
   function saveCurrentDraft(): void {
     persistence.saveDraft({
@@ -86,7 +86,7 @@ export function useNoteEditor(noteId: string, recoveredDraft: NoteDraft | null =
 
   function getText(current: Note, target: EditorTarget): string {
     if (target.kind === 'title') return current.title
-    return current.todos.find((todo) => todo.id === target.todoId)?.text ?? ''
+    return current.todos.find(todo => todo.id === target.todoId)?.text ?? ''
   }
 
   function updateText(target: EditorTarget, value: string): void {
@@ -119,17 +119,17 @@ export function useNoteEditor(noteId: string, recoveredDraft: NoteDraft | null =
   function removeTodo(todoId: string): void {
     if (!canEdit.value) return
     commitText()
-    const index = note.value.todos.findIndex((todo) => todo.id === todoId)
+    const index = note.value.todos.findIndex(todo => todo.id === todoId)
     const todo = note.value.todos[index]
     if (index < 0 || !todo) return
-    note.value = { ...note.value, todos: note.value.todos.filter((item) => item.id !== todoId) }
+    note.value = { ...note.value, todos: note.value.todos.filter(item => item.id !== todoId) }
     history.value = recordApplied(history.value, todoRemovedCommand(index, todo))
     saveCurrentDraft()
   }
 
   function toggleTodo(todoId: string, isCompleted: boolean): void {
     if (!canEdit.value) return
-    const todo = note.value.todos.find((item) => item.id === todoId)
+    const todo = note.value.todos.find(item => item.id === todoId)
     if (!todo || todo.isCompleted === isCompleted) return
     applyAndRecord({ kind: 'todo-completion', todoId, before: todo.isCompleted, after: isCompleted })
   }
@@ -163,7 +163,7 @@ export function useNoteEditor(noteId: string, recoveredDraft: NoteDraft | null =
     if (!canEdit.value) return false
     commitText()
     const now = new Date().toISOString()
-    const cleanedTodos = note.value.todos.filter((todo) => todo.text.trim()).map((todo) => ({ ...todo, text: todo.text.trim() }))
+    const cleanedTodos = note.value.todos.filter(todo => todo.text.trim()).map(todo => ({ ...todo, text: todo.text.trim() }))
     const savedNote: Note = {
       ...note.value,
       title: note.value.title.trim(),

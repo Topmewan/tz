@@ -4,6 +4,8 @@ import { createPinia, setActivePinia } from 'pinia'
 import { useNotesStore } from '../../stores/notes'
 import type { Note, NoteDraft } from '../../types/note'
 
+import { useNoteEditor } from '../../composables/useNoteEditor'
+
 const persistence = vi.hoisted(() => ({
   drafts: [] as NoteDraft[],
   removed: 0,
@@ -19,8 +21,6 @@ vi.mock('../../composables/useNotesPersistence', () => ({
     storageError: null,
   }),
 }))
-
-import { useNoteEditor } from '../../composables/useNoteEditor'
 
 describe('note editor session', () => {
   beforeEach(() => {
@@ -158,5 +158,4 @@ describe('note editor session', () => {
     })
     scope.stop()
   })
-
 })

@@ -9,7 +9,7 @@ export function createHistory(): CommandHistory {
 
 function replaceText(note: Note, target: EditorTarget, value: string): Note {
   if (target.kind === 'title') return { ...note, title: value }
-  return { ...note, todos: note.todos.map((todo) => todo.id === target.todoId ? { ...todo, text: value } : todo) }
+  return { ...note, todos: note.todos.map(todo => todo.id === target.todoId ? { ...todo, text: value } : todo) }
 }
 
 export function applyCommand(note: Note, command: EditorCommand, isUndo = false): Note {
@@ -18,14 +18,14 @@ export function applyCommand(note: Note, command: EditorCommand, isUndo = false)
       return replaceText(note, command.target, isUndo ? command.before : command.after)
     case 'todo-added':
       return isUndo
-        ? { ...note, todos: note.todos.filter((todo) => todo.id !== command.todo.id) }
+        ? { ...note, todos: note.todos.filter(todo => todo.id !== command.todo.id) }
         : { ...note, todos: [...note.todos.slice(0, command.index), command.todo, ...note.todos.slice(command.index)] }
     case 'todo-removed':
       return isUndo
         ? { ...note, todos: [...note.todos.slice(0, command.index), command.todo, ...note.todos.slice(command.index)] }
-        : { ...note, todos: note.todos.filter((todo) => todo.id !== command.todo.id) }
+        : { ...note, todos: note.todos.filter(todo => todo.id !== command.todo.id) }
     case 'todo-completion':
-      return { ...note, todos: note.todos.map((todo) => todo.id === command.todoId ? { ...todo, isCompleted: isUndo ? command.before : command.after } : todo) }
+      return { ...note, todos: note.todos.map(todo => todo.id === command.todoId ? { ...todo, isCompleted: isUndo ? command.before : command.after } : todo) }
   }
 }
 
@@ -35,7 +35,7 @@ export function recordApplied(history: CommandHistory, command: EditorCommand): 
   return { undoStack, redoStack: [], limit: history.limit }
 }
 
-export function undo(note: Note, history: CommandHistory): { note: Note; history: CommandHistory } {
+export function undo(note: Note, history: CommandHistory): { note: Note, history: CommandHistory } {
   const command = history.undoStack.at(-1)
   if (!command) return { note, history }
   return {
@@ -44,7 +44,7 @@ export function undo(note: Note, history: CommandHistory): { note: Note; history
   }
 }
 
-export function redo(note: Note, history: CommandHistory): { note: Note; history: CommandHistory } {
+export function redo(note: Note, history: CommandHistory): { note: Note, history: CommandHistory } {
   const command = history.redoStack.at(-1)
   if (!command) return { note, history }
   const undoStack = [...history.undoStack, command]

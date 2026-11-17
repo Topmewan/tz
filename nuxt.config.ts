@@ -1,11 +1,19 @@
 export default defineNuxtConfig({
+  modules: ['@pinia/nuxt', '@nuxt/eslint'],
   ssr: false,
-  modules: ['@pinia/nuxt'],
+  devtools: {
+    enabled: false,
+  },
   css: ['~/assets/scss/main.scss'],
   typescript: {
     strict: true,
   },
-  devtools: {
-    enabled: false,
+  eslint: {
+    config: {
+      stylistic: true,
+      formatters: {
+        css: true,
+      },
+    },
   },
 })

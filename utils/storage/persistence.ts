@@ -44,11 +44,11 @@ export function applyExternalNotesValue(
   rawValue: string | null,
   activeNoteId: NoteId | null,
   store: NotesStorePort,
-): { externalDeletionId: NoteId | null; isValid: boolean } {
+): { externalDeletionId: NoteId | null, isValid: boolean } {
   const result = parseNotes(rawValue)
   if (!result.ok) return { externalDeletionId: null, isValid: false }
-  const previousIds = new Set(store.notes.map((note) => note.id))
-  const nextIds = new Set(result.value.notes.map((note) => note.id))
+  const previousIds = new Set(store.notes.map(note => note.id))
+  const nextIds = new Set(result.value.notes.map(note => note.id))
   const isActiveNoteRemoved = activeNoteId !== null && previousIds.has(activeNoteId) && !nextIds.has(activeNoteId)
   store.hydrate(result.value.notes)
   const externalDeletionId = isActiveNoteRemoved ? activeNoteId : null

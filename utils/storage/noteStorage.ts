@@ -22,7 +22,8 @@ export function isNote(value: unknown): value is Note {
 export function parseNotes(raw: string | null): ParseResult<PersistedNotesV1> {
   if (raw === null) return { ok: true, value: { schemaVersion: 1, notes: [], savedAt: new Date(0).toISOString() } }
   let parsed: unknown
-  try { parsed = JSON.parse(raw) as unknown } catch { return { ok: false, reason: 'invalid-json' } }
+  try { parsed = JSON.parse(raw) as unknown }
+  catch { return { ok: false, reason: 'invalid-json' } }
   if (!isObject(parsed) || !Array.isArray(parsed.notes)) return { ok: false, reason: 'invalid-schema' }
   if (parsed.schemaVersion !== 1) return { ok: false, reason: 'unsupported-version' }
   if (!parsed.notes.every(isNote) || typeof parsed.savedAt !== 'string') return { ok: false, reason: 'invalid-schema' }
@@ -40,7 +41,8 @@ export function isDraft(value: unknown): value is NoteDraft {
 export function parseDraft(raw: string | null): ParseResult<PersistedDraftV1 | null> {
   if (raw === null) return { ok: true, value: null }
   let parsed: unknown
-  try { parsed = JSON.parse(raw) as unknown } catch { return { ok: false, reason: 'invalid-json' } }
+  try { parsed = JSON.parse(raw) as unknown }
+  catch { return { ok: false, reason: 'invalid-json' } }
   if (!isObject(parsed) || !('schemaVersion' in parsed)) return { ok: false, reason: 'invalid-schema' }
   if (parsed.schemaVersion !== 1) return { ok: false, reason: 'unsupported-version' }
   if (!isDraft(parsed.draft)) return { ok: false, reason: 'invalid-schema' }
@@ -57,5 +59,5 @@ export function serializeDraft(draft: NoteDraft): string {
 
 export function isDraftRestorable(draft: NoteDraft, notes: Note[]): boolean {
   if (draft.noteId === null) return true
-  return notes.some((note) => note.id === draft.noteId && note.updatedAt === draft.baseUpdatedAt)
+  return notes.some(note => note.id === draft.noteId && note.updatedAt === draft.baseUpdatedAt)
 }

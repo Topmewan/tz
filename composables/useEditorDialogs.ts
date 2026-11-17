@@ -81,13 +81,16 @@ export function useEditorDialogs(options: EditorDialogsOptions): EditorDialogs {
     if (activeKind === 'cancel') {
       options.editor.discard()
       options.goToList()
-    } else if (activeKind === 'delete') {
+    }
+    else if (activeKind === 'delete') {
       options.deleteNote()
       options.goToList()
-    } else if (activeKind === 'restore') {
+    }
+    else if (activeKind === 'restore') {
       const draft = options.candidateDraft.value
       if (draft) options.editor.restoreDraft(draft)
-    } else if (activeKind === 'external') options.goToList()
+    }
+    else if (activeKind === 'external') options.goToList()
     kind.value = null
     isOpen.value = false
   }

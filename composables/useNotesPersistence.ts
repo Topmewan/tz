@@ -16,7 +16,7 @@ export function useNotesPersistence(): PersistenceLifecycle {
       storageListener = (event: StorageEvent): void => listener(event)
       window.addEventListener('storage', storageListener)
     },
-    removeStorageListener: (listener: (event: StorageChange) => void): void => {
+    removeStorageListener: (_listener: (event: StorageChange) => void): void => {
       if (!storageListener) return
       window.removeEventListener('storage', storageListener)
       storageListener = null
@@ -31,7 +31,7 @@ export function useNotesPersistence(): PersistenceLifecycle {
   const lifecycle = createPersistenceLifecycle(
     store,
     storage,
-    (onChange) => store.$subscribe((_mutation, state) => {
+    onChange => store.$subscribe((_mutation, state) => {
       if (state.hasHydrated) onChange()
     }, { detached: true }),
     eventTarget,

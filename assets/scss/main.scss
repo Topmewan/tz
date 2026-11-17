@@ -8,9 +8,25 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
-* { box-sizing: border-box; }
-body { min-width: $viewport-min-width; min-height: $viewport-height; margin: 0; }
-button, input, textarea { font: inherit; }
-button { touch-action: manipulation; }
-a { color: inherit; }
-::selection { background: $color-soft; }
+* {
+  box-sizing: border-box;
+}
+body {
+  min-width: $viewport-min-width;
+  min-height: $viewport-height;
+  margin: 0;
+}
+button,
+input,
+textarea {
+  font: inherit;
+}
+button {
+  touch-action: manipulation;
+}
+a {
+  color: inherit;
+}
+::selection {
+  background: $color-soft;
+}

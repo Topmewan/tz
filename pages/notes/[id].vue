@@ -11,7 +11,6 @@ import { useEditorShortcuts } from '../../composables/useEditorShortcuts'
 import { useNoteEditor } from '../../composables/useNoteEditor'
 import { useNotesPersistence } from '../../composables/useNotesPersistence'
 import { useNotesStore } from '../../stores/notes'
-import type { NoteDraft } from '../../types/note'
 
 const route = useRoute()
 const router = useRouter()
@@ -64,11 +63,11 @@ function onTitleInput(value: string): void {
   editor.updateText({ kind: 'title' }, value)
 }
 
-function onTextInput(payload: { todoId: string; value: string }): void {
+function onTextInput(payload: { todoId: string, value: string }): void {
   editor.updateText({ kind: 'todoText', todoId: payload.todoId }, payload.value)
 }
 
-function onToggle(payload: { todoId: string; isCompleted: boolean }): void {
+function onToggle(payload: { todoId: string, isCompleted: boolean }): void {
   editor.toggleTodo(payload.todoId, payload.isCompleted)
 }
 
@@ -78,19 +77,47 @@ useEditorShortcuts({ undo: editor.undo, redo: editor.redo }, isFound)
 <template>
   <main class="editor-page">
     <header class="editor-page__top">
-      <BaseButton variant="ghost" @click="dialogs.backToList">← Все заметки</BaseButton>
+      <BaseButton
+        variant="ghost"
+        @click="dialogs.backToList"
+      >
+        ← Все заметки
+      </BaseButton>
       <span class="editor-page__hint">Автосохранение черновика включено</span>
     </header>
-    <p v-if="conflictingDraft && !dialogs.isConflictDismissed.value" class="editor-page__conflict" role="alert">
+    <p
+      v-if="conflictingDraft && !dialogs.isConflictDismissed.value"
+      class="editor-page__conflict"
+      role="alert"
+    >
       Черновик относится к устаревшей версии заметки и не может быть восстановлен.
-      <BaseButton variant="secondary" @click="dialogs.discardConflict">Удалить черновик</BaseButton>
+      <BaseButton
+        variant="secondary"
+        @click="dialogs.discardConflict"
+      >
+        Удалить черновик
+      </BaseButton>
     </p>
-    <section v-if="!isFound" class="editor-page__missing">
-      <EmptyState title="Заметка не найдена" description="Возможно, её уже удалили или ссылка устарела.">
-        <BaseButton variant="primary" @click="dialogs.backToList">Вернуться к заметкам</BaseButton>
+    <section
+      v-if="!isFound"
+      class="editor-page__missing"
+    >
+      <EmptyState
+        title="Заметка не найдена"
+        description="Возможно, её уже удалили или ссылка устарела."
+      >
+        <BaseButton
+          variant="primary"
+          @click="dialogs.backToList"
+        >
+          Вернуться к заметкам
+        </BaseButton>
       </EmptyState>
     </section>
-    <section v-else class="editor-page__content">
+    <section
+      v-else
+      class="editor-page__content"
+    >
       <EditorToolbar
         :can-undo="editor.canUndo.value"
         :can-redo="editor.canRedo.value"
@@ -101,7 +128,13 @@ useEditorShortcuts({ undo: editor.undo, redo: editor.redo }, isFound)
         @cancel="dialogs.requestCancel"
         @remove="dialogs.requestDelete"
       />
-      <p v-if="hasRemovedEmptyTodos" class="editor-page__notice" role="status">Пустые пункты удалены при сохранении.</p>
+      <p
+        v-if="hasRemovedEmptyTodos"
+        class="editor-page__notice"
+        role="status"
+      >
+        Пустые пункты удалены при сохранении.
+      </p>
       <NoteEditor
         :note="editor.note.value"
         :is-new="isNew"
@@ -128,11 +161,46 @@ useEditorShortcuts({ undo: editor.undo, redo: editor.redo }, isFound)
 
 <style scoped lang="scss">
 @use '~/assets/scss/tokens' as *;
-.editor-page { width: min(100% - #{$space-8}, $content-width); min-height: $viewport-height; margin-inline: auto; padding-block: $space-4 $space-8; }
-.editor-page__top { display: flex; align-items: center; justify-content: space-between; gap: $space-3; margin-bottom: $space-6; }
-.editor-page__hint { color: $color-muted; font-size: $font-small; }
-.editor-page__content { display: grid; gap: $space-6; }
-.editor-page__missing { padding-top: $space-8; }
-.editor-page__conflict { display: flex; align-items: center; flex-wrap: wrap; gap: $space-3; margin: 0 0 $space-5; padding: $space-3; border-radius: $radius-control; background: $color-soft; color: $color-ink; }
-.editor-page__notice { margin: 0; padding: $space-3; border-radius: $radius-control; background: $color-soft; color: $color-accent; }
+.editor-page {
+  width: min(100% - #{$space-8}, $content-width);
+  min-height: $viewport-height;
+  margin-inline: auto;
+  padding-block: $space-4 $space-8;
+}
+.editor-page__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $space-3;
+  margin-bottom: $space-6;
+}
+.editor-page__hint {
+  color: $color-muted;
+  font-size: $font-small;
+}
+.editor-page__content {
+  display: grid;
+  gap: $space-6;
+}
+.editor-page__missing {
+  padding-top: $space-8;
+}
+.editor-page__conflict {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin: 0 0 $space-5;
+  padding: $space-3;
+  border-radius: $radius-control;
+  background: $color-soft;
+  color: $color-ink;
+}
+.editor-page__notice {
+  margin: 0;
+  padding: $space-3;
+  border-radius: $radius-control;
+  background: $color-soft;
+  color: $color-accent;
+}
 </style>

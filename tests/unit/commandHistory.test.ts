@@ -32,14 +32,14 @@ describe('commandHistory', () => {
 
     const added = { id: 'c', text: 'third', isCompleted: false }
     const afterInsert = applyCommand(original, todoAddedCommand(1, added))
-    expect(afterInsert.todos.map((todo) => todo.id)).toEqual(['a', 'c', 'b'])
-    expect(applyCommand(afterInsert, todoAddedCommand(1, added), true).todos.map((todo) => todo.id)).toEqual(['a', 'b'])
+    expect(afterInsert.todos.map(todo => todo.id)).toEqual(['a', 'c', 'b'])
+    expect(applyCommand(afterInsert, todoAddedCommand(1, added), true).todos.map(todo => todo.id)).toEqual(['a', 'b'])
 
     const removed = original.todos[0]!
     const removeCommand = todoRemovedCommand(0, removed)
     const afterRemove = applyCommand(original, removeCommand)
-    expect(afterRemove.todos.map((todo) => todo.id)).toEqual(['b'])
-    expect(applyCommand(afterRemove, removeCommand, true).todos.map((todo) => todo.id)).toEqual(['a', 'b'])
+    expect(afterRemove.todos.map(todo => todo.id)).toEqual(['b'])
+    expect(applyCommand(afterRemove, removeCommand, true).todos.map(todo => todo.id)).toEqual(['a', 'b'])
   })
 
   it('clears the redo branch after a new operation', () => {

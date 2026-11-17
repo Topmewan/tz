@@ -42,10 +42,12 @@ export function useFocusTrap(isOpen: Ref<boolean>, dialog: Ref<HTMLElement | nul
     if (!isFocusInside) {
       event.preventDefault()
       ;(event.shiftKey ? last : first)?.focus()
-    } else if (event.shiftKey && document.activeElement === first) {
+    }
+    else if (event.shiftKey && document.activeElement === first) {
       event.preventDefault()
       last?.focus()
-    } else if (!event.shiftKey && document.activeElement === last) {
+    }
+    else if (!event.shiftKey && document.activeElement === last) {
       event.preventDefault()
       first?.focus()
     }

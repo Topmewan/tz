@@ -1,4 +1,4 @@
-import type { Note, NoteDraft, NoteId } from '../../types/note'
+import type { NoteDraft, NoteId } from '../../types/note'
 import { applyExternalNotesValue, clearDraft, hydrateFromStorage, persistDraft, persistNotes, type NotesStorePort, type StorageLike } from './persistence'
 import { isDraftRestorable, parseDraft } from './noteStorage'
 import { DRAFT_STORAGE_KEY, NOTES_STORAGE_KEY } from './storageKeys'
@@ -55,17 +55,20 @@ export function createPersistenceLifecycle(
 
   const notesWriter = createDebouncedAction(() => {
     if (!canWriteNotes) return
-    try { persistNotes(storage, store.notes) } catch { storageError = 'Не удалось сохранить заметки.' }
+    try { persistNotes(storage, store.notes) }
+    catch { storageError = 'Не удалось сохранить заметки.' }
   }, 300)
   const draftWriter = createDebouncedAction(() => {
     if (!pendingDraft) return
-    try { persistDraft(storage, pendingDraft) } catch { storageError = 'Не удалось сохранить черновик.' }
+    try { persistDraft(storage, pendingDraft) }
+    catch { storageError = 'Не удалось сохранить черновик.' }
   }, 500)
 
   function flush(): void {
     notesWriter.cancel()
     if (!canWriteNotes) return
-    try { persistNotes(storage, store.notes) } catch { storageError = 'Не удалось сохранить заметки.' }
+    try { persistNotes(storage, store.notes) }
+    catch { storageError = 'Не удалось сохранить заметки.' }
   }
 
   const unsubscribe = subscribe(() => {
@@ -80,7 +83,8 @@ export function createPersistenceLifecycle(
   function removeDraft(): void {
     draftWriter.cancel()
     pendingDraft = null
-    try { clearDraft(storage) } catch { storageError = 'Не удалось удалить черновик.' }
+    try { clearDraft(storage) }
+    catch { storageError = 'Не удалось удалить черновик.' }
   }
 
   function onStorage(event: StorageChange): void {
@@ -92,7 +96,8 @@ export function createPersistenceLifecycle(
     if (result.externalDeletionId) {
       draftWriter.cancel()
       pendingDraft = null
-    } else if (result.isValid) canWriteNotes = true
+    }
+    else if (result.isValid) canWriteNotes = true
   }
 
   function onPageHide(): void {

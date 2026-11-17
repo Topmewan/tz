@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Note, NoteDraft, NoteId } from '../../types/note'
-import type { PersistenceEventTarget, StorageChange } from '../../utils/storage/persistenceLifecycle'
-import { createPersistenceLifecycle, type PersistenceStore } from '../../utils/storage/persistenceLifecycle'
+import type { PersistenceEventTarget, StorageChange, PersistenceStore } from '../../utils/storage/persistenceLifecycle'
+import { createPersistenceLifecycle } from '../../utils/storage/persistenceLifecycle'
 import type { StorageLike } from '../../utils/storage/persistence'
 import { parseNotes, serializeDraft, serializeNotes } from '../../utils/storage/noteStorage'
 import { DRAFT_STORAGE_KEY, NOTES_STORAGE_KEY } from '../../utils/storage/storageKeys'
@@ -24,6 +24,7 @@ class TestStore implements PersistenceStore {
     this.subscribers.add(onChange)
     return () => this.subscribers.delete(onChange)
   }
+
   changed(): void { for (const subscriber of this.subscribers) subscriber() }
 }
 
@@ -99,5 +100,4 @@ describe('app persistence lifecycle', () => {
     expect(lifecycle.conflictingDraft).toEqual(staleDraft)
     lifecycle.dispose()
   })
-
 })

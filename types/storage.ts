@@ -11,6 +11,6 @@ export interface PersistedDraftV1 {
   draft: NoteDraft
 }
 
-export type ParseResult<T> =
-  | { ok: true; value: T }
-  | { ok: false; reason: 'invalid-json' | 'invalid-schema' | 'unsupported-version' }
+export type ParseResult<T>
+  = | { ok: true, value: T }
+    | { ok: false, reason: 'invalid-json' | 'invalid-schema' | 'unsupported-version' }

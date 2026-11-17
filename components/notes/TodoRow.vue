@@ -4,11 +4,11 @@ import BaseInput from '../ui/BaseInput.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import type { TodoItem } from '../../types/note'
 
-const props = defineProps<{ todo: TodoItem; index: number }>()
+const props = defineProps<{ todo: TodoItem, index: number }>()
 const emit = defineEmits<{
-  textInput: [payload: { todoId: string; value: string }]
+  textInput: [payload: { todoId: string, value: string }]
   textCommit: []
-  toggle: [payload: { todoId: string; isCompleted: boolean }]
+  toggle: [payload: { todoId: string, isCompleted: boolean }]
   remove: [todoId: string]
 }>()
 
@@ -19,7 +19,10 @@ function onRemove(): void { emit('remove', props.todo.id) }
 </script>
 
 <template>
-  <li class="todo-row" :class="{ 'todo-row--complete': props.todo.isCompleted }">
+  <li
+    class="todo-row"
+    :class="{ 'todo-row--complete': props.todo.isCompleted }"
+  >
     <BaseCheckbox
       :id="`todo-${todo.id}`"
       :label="`Выполнено: ${todo.text || `Задача ${index + 1}`}`"
@@ -34,13 +37,32 @@ function onRemove(): void { emit('remove', props.todo.id) }
       @update:model-value="onTextInput"
       @blur="onTextCommit"
     />
-    <BaseButton variant="ghost" :aria-label="`Удалить задачу ${index + 1}`" @click="onRemove">Удалить</BaseButton>
+    <BaseButton
+      variant="ghost"
+      :aria-label="`Удалить задачу ${index + 1}`"
+      @click="onRemove"
+    >
+      Удалить
+    </BaseButton>
   </li>
 </template>
 
 <style scoped lang="scss">
 @use '~/assets/scss/tokens' as *;
-.todo-row { display: grid; grid-template-columns: 1fr; align-items: center; gap: $space-3; padding: $space-4 0; border-bottom: $border-width solid $color-line; }
-.todo-row--complete :deep(.field__control) { color: $color-muted; }
-@include tablet { .todo-row { grid-template-columns: #{$todo-label-column} #{$todo-input-column} auto; } }
+.todo-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: $space-3;
+  padding: $space-4 0;
+  border-bottom: $border-width solid $color-line;
+}
+.todo-row--complete :deep(.field__control) {
+  color: $color-muted;
+}
+@include tablet {
+  .todo-row {
+    grid-template-columns: #{$todo-label-column} #{$todo-input-column} auto;
+  }
+}
 </style>

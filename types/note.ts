@@ -22,6 +22,6 @@ export interface NoteDraft {
   savedAt: string
 }
 
-export type EditorTarget =
-  | { kind: 'title' }
-  | { kind: 'todoText'; todoId: TodoId }
+export type EditorTarget
+  = | { kind: 'title' }
+    | { kind: 'todoText', todoId: TodoId }
